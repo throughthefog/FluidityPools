@@ -1,6 +1,6 @@
-print("Welcome to the SolidityPools installer!")
+print("Welcome to the FluidityPools installer!")
 
-local repo = "afonya2/SolidityPools"
+local repo = "throughthefog/FluidityPools"
 local branch = "main"
 local files = {
     ["items/Ores.conf"] = "items/Ores.conf",

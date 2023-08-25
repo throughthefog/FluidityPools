@@ -108,8 +108,8 @@ local function sendShopsync()
             owner = config.owner,
             computerID = os.getComputerID(),
             software = {
-                name = "SolidityPools",
-                version = SolidityPools.version
+                name = "FluidityPools",
+                version = FluidityPools.version
             },
             location = {
                 coordinates = coords
@@ -122,24 +122,24 @@ local function sendShopsync()
 end
 
 function shopsync()
-    config = SolidityPools.config
-    items = SolidityPools.items
-    BIL = SolidityPools.BIL
+    config = FluidityPools.config
+    items = FluidityPools.items
+    BIL = FluidityPools.BIL
     local mods = getWModem()
     if mods == nil then
         bsod("No wireless modem found")
     end
-    while (not SolidityPools.pricesLoaded) or (not SolidityPools.countsLoaded) do
+    while (not FluidityPools.pricesLoaded) or (not FluidityPools.countsLoaded) do
         os.sleep(0)
     end
     os.sleep(math.random() * 15 + 15)
     sendShopsync()
     local was = false
     while true do
-        if SolidityPools.itemChangeInfo.is then
+        if FluidityPools.itemChangeInfo.is then
             was = true
         end
-        if (not SolidityPools.itemChangeInfo.is) and was then
+        if (not FluidityPools.itemChangeInfo.is) and was then
             sendShopsync()
             was = false
             os.sleep(30)

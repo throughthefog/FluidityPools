@@ -43,21 +43,21 @@ function renderInit()
     bigfont.writeOn(monitor, 1, config.shopname, w/2-(#config.shopname*3)/2,2)
 
     monitor.setTextColor(config.palette.logo.fg)
-    monitor.setCursorPos(w-#("SolidityPools")+1, 1)
-    monitor.write("SolidityPools")
+    monitor.setCursorPos(w-#("FluidityPools")+1, 1)
+    monitor.write("FluidityPools")
 
     monitor.setBackgroundColor(config.palette.footer.bg)
     monitor.setTextColor(config.palette.footer.fg)
     if loggedIn.is then
-        bigfont.writeOn(monitor, 1, "Balance: \164"..tostring(math.floor(loggedIn.balance*1000)/1000), 2,h-2)
-        monitor.setCursorPos(w-#(loggedIn.username.." Exit with \\"..config.command.." exit")-1, h-2)
+        bigfont.writeOn(monitor, 1, "bal: \164"..tostring(math.floor(loggedIn.balance*1000)/1000), 2,h-2)
+        monitor.setCursorPos(w-#(loggedIn.username.." exit with \\"..config.command.." exit")-1, h-2)
         monitor.write(loggedIn.username.." ")
         monitor.setTextColor(config.palette.footer.exitfg)
-        monitor.write("Exit with \\"..config.command.." exit")
-        monitor.setCursorPos(w-#("Deposit at "..(config.kristName ~= nil and (config.kristName..".kst") or config.address))-1,h-1)
-        monitor.write("Deposit at "..(config.kristName ~= nil and (config.kristName..".kst") or config.address))
+        monitor.write("exit with \\"..config.command.." exit")
+        monitor.setCursorPos(w-#("deposit at "..(config.kristName ~= nil and (config.kristName..".kst") or config.address))-1,h-1)
+        monitor.write("deposit at "..(config.kristName ~= nil and (config.kristName..".kst") or config.address))
     else
-        bigfont.writeOn(monitor, 1, "Start with: \\"..config.command.." start", 2,h-2)
+        bigfont.writeOn(monitor, 1, "start with \\"..config.command.." start", 2,h-2)
     end
     renderCategories()
     renderBanners()
@@ -102,14 +102,14 @@ function renderBanners()
 
         monitor.setBackgroundColor(config.palette.buy.bg)
         monitor.setTextColor(config.palette.buy.fg)
-        bigfont.writeOn(monitor, 1, "Buy", mid/2-(#("Buy")*3)/2, 6)
+        bigfont.writeOn(monitor, 1, "buy", mid/2-(#("Buy")*3)/2, 6)
         monitor.setCursorPos(mid/2-#("\\"..config.command.." buy <item> <amount>")/2, 5+4)
         monitor.write("\\"..config.command.." buy <item> <amount>")
         monitor.setBackgroundColor(config.palette.sell.bg)
         monitor.setTextColor(config.palette.sell.fg)
-        bigfont.writeOn(monitor, 1, "Sell", (mid/2-(#("Sell")*3)/2)+mid, 6)
-        monitor.setCursorPos((mid/2-#("Drop above the turtle")/2)+mid, 5+4)
-        monitor.write("Drop above the turtle")
+        bigfont.writeOn(monitor, 1, "sell", (mid/2-(#("Sell")*3)/2)+mid, 6)
+        monitor.setCursorPos((mid/2-#("drop above the turtle")/2)+mid, 5+4)
+        monitor.write("drop above the turtle")
         renderColumns()
     elseif config.mode == "buy" then
         for y=5,5+4 do
@@ -122,7 +122,7 @@ function renderBanners()
 
         monitor.setBackgroundColor(config.palette.buy.bg)
         monitor.setTextColor(config.palette.buy.fg)
-        bigfont.writeOn(monitor, 1, "Buy", w/2-(#("Buy")*3)/2, 6)
+        bigfont.writeOn(monitor, 1, "buy", w/2-(#("Buy")*3)/2, 6)
         monitor.setCursorPos(w/2-#("\\"..config.command.." buy <item> <amount>")/2, 5+4)
         monitor.write("\\"..config.command.." buy <item> <amount>")
         renderColumns()
@@ -137,9 +137,9 @@ function renderBanners()
 
         monitor.setBackgroundColor(config.palette.sell.bg)
         monitor.setTextColor(config.palette.sell.fg)
-        bigfont.writeOn(monitor, 1, "Sell", w/2-(#("Sell")*3)/2, 6)
-        monitor.setCursorPos(w/2-#("Drop above the turtle")/2, 5+4)
-        monitor.write("Drop above the turtle")
+        bigfont.writeOn(monitor, 1, "sell", w/2-(#("Sell")*3)/2, 6)
+        monitor.setCursorPos(w/2-#("drop above the turtle")/2, 5+4)
+        monitor.write("drop above the turtle")
         renderColumns()
     else
         bsod("Invalid config for mode!")
@@ -263,10 +263,10 @@ function renderItems()
             monitor.setBackgroundColor(config.palette.listA.bg)
             second = true
         end
-        if SolidityPools.itemChangeInfo.is and (SolidityPools.itemChangeInfo.category == selectedCategory) and (SolidityPools.itemChangeInfo.pos == kk) then
-            if SolidityPools.itemChangeInfo.mode == "buy" then
+        if FluidityPools.itemChangeInfo.is and (FluidityPools.itemChangeInfo.category == selectedCategory) and (FluidityPools.itemChangeInfo.pos == kk) then
+            if FluidityPools.itemChangeInfo.mode == "buy" then
                 monitor.setBackgroundColor(config.palette.buy.bg)
-            elseif SolidityPools.itemChangeInfo.mode == "sell" then
+            elseif FluidityPools.itemChangeInfo.mode == "sell" then
                 monitor.setBackgroundColor(config.palette.sell.bg)
             end
         end
@@ -405,12 +405,12 @@ function rerender()
 end
 
 function frontend()
-    monitor = SolidityPools.monitor.wrap
-    config = SolidityPools.config
-    items = SolidityPools.items
-    bigfont = SolidityPools.bigfont
-    BIL = SolidityPools.BIL
-    loggedIn = SolidityPools.loggedIn
+    monitor = FluidityPools.monitor.wrap
+    config = FluidityPools.config
+    items = FluidityPools.items
+    bigfont = FluidityPools.bigfont
+    BIL = FluidityPools.BIL
+    loggedIn = FluidityPools.loggedIn
     for k,v in pairs(items) do
         selectedCategory = k
         break
@@ -418,20 +418,20 @@ function frontend()
     w,h = monitor.getSize()
     monitor.setCursorPos(1,1)
     monitor.write("Loading...")
-    while (not SolidityPools.pricesLoaded) or (not SolidityPools.countsLoaded) do
+    while (not FluidityPools.pricesLoaded) or (not FluidityPools.countsLoaded) do
         os.sleep(0)
     end
     monitor.setCursorPos(1,1)
     monitor.clearLine()
     monitor.write("Connecting...")
-    while not SolidityPools.kristConnected do
+    while not FluidityPools.kristConnected do
         os.sleep(0)
     end
     rerender()
     local function categoryClicker()
         while true do
             local event, side, x, y = os.pullEvent("monitor_touch")
-            if side == SolidityPools.monitor.id then
+            if side == FluidityPools.monitor.id then
                 if y == h-4 then
                     local xx = 2
                     for k,v in pairs(items) do
@@ -456,10 +456,10 @@ function frontend()
     local function itemChangeListener()
         local was = false
         while true do
-            if SolidityPools.itemChangeInfo.is and (SolidityPools.itemChangeInfo.category == selectedCategory) then
+            if FluidityPools.itemChangeInfo.is and (FluidityPools.itemChangeInfo.category == selectedCategory) then
                 was = true
             end
-            if (not SolidityPools.itemChangeInfo.is) and was then
+            if (not FluidityPools.itemChangeInfo.is) and was then
                 renderItems()
                 was = false
             end

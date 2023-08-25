@@ -63,7 +63,7 @@ local function initSocket()
         id = 1,
         event = "transactions"
     }))
-    SolidityPools.ws = socket
+    FluidityPools.ws = socket
     return function()
         local ok,data = pcall(socket.receive)
 
@@ -130,7 +130,7 @@ local function onTrans(json)
                     end
                     if config.webhook then
                         local emb = dw.createEmbed()
-                            :setAuthor("Solidity Pools")
+                            :setAuthor("Fluidity Pools")
                             :setTitle("Deposit")
                             :setColor(3328100)
                             :addField("From: ", "`"..(trans.meta["return"] and trans.meta["return"] or trans.from).."`",true)
@@ -140,7 +140,7 @@ local function onTrans(json)
                             :addField("User: ", trans.meta.username.." (`"..trans.meta.useruuid.."`)",true)
                             :addField("New balance: ", tostring(math.floor(pdat.balance*1000)/1000),true)
                             :setTimestamp()
-                            :setFooter("SolidityPools v"..SolidityPools.version)
+                            :setFooter("FluidityPools v"..FluidityPools.version)
                         dw.sendMessage(config.webhook_url, config.shopname, nil, "", {emb.sendable()})
                     end
                 else
@@ -154,14 +154,14 @@ local function onTrans(json)
 end
 
 function kristManager()
-    config = SolidityPools.config
-    items = SolidityPools.items
-    BIL = SolidityPools.BIL
-    loggedIn = SolidityPools.loggedIn
-    kapi = SolidityPools.kapi
-    dw = SolidityPools.dw
+    config = FluidityPools.config
+    items = FluidityPools.items
+    BIL = FluidityPools.BIL
+    loggedIn = FluidityPools.loggedIn
+    kapi = FluidityPools.kapi
+    dw = FluidityPools.dw
     local sock = initSocket()
-    SolidityPools.kristConnected = true
+    FluidityPools.kristConnected = true
     while true do
         local data = sock()
         if not data then

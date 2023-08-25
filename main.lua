@@ -114,9 +114,9 @@ function bsod(message)
     monitor.clear()
     bigfont.blitOn(monitor, 1, ":(", "00", "bb", 2, 2)
     monitor.setCursorPos(2, 5)
-    monitor.write("The shop ran into a problem and needs restart")
+    monitor.write("the shop ran into a problem and needs restart")
     monitor.setCursorPos(2, 6)
-    monitor.write("Information: "..message)
+    monitor.write("crash info: "..message)
     local stack = debug.traceback()
     for k,v in ipairs(mysplit(stack, "\n")) do
         monitor.setCursorPos(2, 7+k)
@@ -124,22 +124,22 @@ function bsod(message)
     end
     if config.webhook then
         local emb = dw.createEmbed()
-            :setAuthor("Solidity Pools")
+            :setAuthor("Fluidity Pools")
             :setTitle("The shop ran into a problem and needs restart")
             :setColor(13120050)
             :setDescription("Information: "..message)
             :addField("Traceback: ", "`"..stack.."`")
             :setTimestamp()
-            :setFooter("SolidityPools v"..SolidityPools.version)
+            :setFooter("FluidityPools v"..FluidityPools.version)
         dw.sendMessage(config.webhook_url, config.shopname, nil, "", {emb.sendable()})
     end
 end
 
-if (SolidityPools ~= nil) and (SolidityPools.ws ~= nil) then
-    SolidityPools.ws.close()
+if (FluidityPools ~= nil) and (FluidityPools.ws ~= nil) then
+    FluidityPools.ws.close()
 end
 
-_G.SolidityPools = {
+_G.FluidityPools = {
     config = config,
     items = items,
     version = "1.1.2",
@@ -177,21 +177,21 @@ _G.SolidityPools = {
     },
     lockTurtleInv = false
 }
-function SolidityPools.loggedIn.loadUser()
-    if fs.exists("users/"..SolidityPools.loggedIn.uuid..".cache") then
-        local dat = loadCache("users/"..SolidityPools.loggedIn.uuid..".cache")
-        SolidityPools.loggedIn.balance = dat.balance
-        SolidityPools.loggedIn.transactions = dat.transactions
+function FluidityPools.loggedIn.loadUser()
+    if fs.exists("users/"..FluidityPools.loggedIn.uuid..".cache") then
+        local dat = loadCache("users/"..FluidityPools.loggedIn.uuid..".cache")
+        FluidityPools.loggedIn.balance = dat.balance
+        FluidityPools.loggedIn.transactions = dat.transactions
     else
-        SolidityPools.loggedIn.balance = 0
-        SolidityPools.loggedIn.transactions = {}
+        FluidityPools.loggedIn.balance = 0
+        FluidityPools.loggedIn.transactions = {}
     end
 end
-function SolidityPools.loggedIn.saveUser()
-    saveCache("users/"..SolidityPools.loggedIn.uuid..".cache", {
-        balance = SolidityPools.loggedIn.balance,
-        transactions = SolidityPools.loggedIn.transactions,
-        username = SolidityPools.loggedIn.username
+function FluidityPools.loggedIn.saveUser()
+    saveCache("users/"..FluidityPools.loggedIn.uuid..".cache", {
+        balance = FluidityPools.loggedIn.balance,
+        transactions = FluidityPools.loggedIn.transactions,
+        username = FluidityPools.loggedIn.username
     })
 end
 

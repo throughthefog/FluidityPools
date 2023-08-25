@@ -121,7 +121,7 @@ Forcefully ends the current session
         chatbox.tell(loggedIn.uuid, "&aYour remaining &e"..(math.floor(loggedIn.balance*1000)/1000).."kst &awill be stored for your next purchase", config.shopname, nil, "format")
         if config.webhook then
             local emb = dw.createEmbed()
-                :setAuthor("Solidity Pools")
+                :setAuthor("Fluidity Pools")
                 :setTitle("Session ended")
                 :setColor(3302600)
                 :addField("User: ", loggedIn.username.." (`"..loggedIn.uuid.."`)",true)
@@ -131,10 +131,10 @@ Forcefully ends the current session
                 :addField("Item's bought: ", tostring(math.floor(loggedIn.itmsBought*1000)/1000),true)
                 :addField("Money gained/spent: ", tostring(math.floor(loggedIn.moneyGained*1000)/1000),true)
                 :setTimestamp()
-                :setFooter("SolidityPools v"..SolidityPools.version)
+                :setFooter("FluidityPools v"..FluidityPools.version)
             dw.editMessage(config.webhook_url, loggedIn.msgId, "", {emb.sendable()})
             local emb2 = dw.createEmbed()
-                :setAuthor("Solidity Pools")
+                :setAuthor("Fluidity Pools")
                 :setTitle("Session details")
                 :setDescription("Item changes in the storage")
                 :setColor(3302600)
@@ -142,7 +142,7 @@ Forcefully ends the current session
                 :addField("Balance: ", tostring(math.floor(loggedIn.balance*1000)/1000),true)
                 :addField("-","-")
                 :setTimestamp()
-                :setFooter("SolidityPools v"..SolidityPools.version)
+                :setFooter("FluidityPools v"..FluidityPools.version)
             for k,v in pairs(loggedIn.itemTransactions) do
                 if v ~= 0 then
                     emb2:addField(k, tostring(v), true)
@@ -168,12 +168,12 @@ Forcefully ends the current session
 end 
 
 function adminCommands()
-    config = SolidityPools.config
-    items = SolidityPools.items
-    BIL = SolidityPools.BIL
-    loggedIn = SolidityPools.loggedIn
-    dw = SolidityPools.dw
-    while (not SolidityPools.pricesLoaded) or (not SolidityPools.countsLoaded) do
+    config = FluidityPools.config
+    items = FluidityPools.items
+    BIL = FluidityPools.BIL
+    loggedIn = FluidityPools.loggedIn
+    dw = FluidityPools.dw
+    while (not FluidityPools.pricesLoaded) or (not FluidityPools.countsLoaded) do
         os.sleep(0)
     end
     while true do

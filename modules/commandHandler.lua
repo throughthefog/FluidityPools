@@ -117,7 +117,7 @@ Withdraws Krist from your account
             end
             if config.webhook then
                 local emb = dw.createEmbed()
-                    :setAuthor("Solidity Pools")
+                    :setAuthor("Fluidity Pools")
                     :setTitle("Session start")
                     :setColor(3302600)
                     :addField("User: ", loggedIn.username.." (`"..loggedIn.uuid.."`)",true)
@@ -127,7 +127,7 @@ Withdraws Krist from your account
                     :addField("Item's bought: ", tostring(math.floor(loggedIn.itmsBought*1000)/1000),true)
                     :addField("Money gained/spent: ", tostring(math.floor(loggedIn.moneyGained*1000)/1000),true)
                     :setTimestamp()
-                    :setFooter("SolidityPools v"..SolidityPools.version)
+                    :setFooter("FluidityPools v"..FluidityPools.version)
                 local dms = dw.sendMessage(config.webhook_url, config.shopname, nil, "", {emb.sendable()})
                 loggedIn.msgId = dms.id
             end
@@ -254,7 +254,7 @@ Withdraws Krist from your account
                 chatbox.tell(user, "&cYou don't have enough funds to withdraw this amount", config.shopname, nil, "format")
                 return
             end
-            if SolidityPools.kapi.getBalance(config.address) < tonumber(args[2]) then
+            if FluidityPools.kapi.getBalance(config.address) < tonumber(args[2]) then
                 chatbox.tell(user, "&c"..config.shopname.." don't have enough funds to withdraw this amount", config.shopname, nil, "format")
                 return
             end
@@ -268,7 +268,7 @@ Withdraws Krist from your account
             while #pdat.transactions > 10 do
                 table.remove(pdat.transactions, #pdat.transactions)
             end
-            local ok,err = pcall(SolidityPools.kapi.makeTransaction, config.privateKey, args[3], tonumber(args[2]), "message=Withdrawed amount")
+            local ok,err = pcall(FluidityPools.kapi.makeTransaction, config.privateKey, args[3], tonumber(args[2]), "message=Withdrawed amount")
             if not ok then
                 chatbox.tell(user, "&cCan't create transaction, reason: &7"..err, config.shopname, nil, "format")
                 return
@@ -282,7 +282,7 @@ Withdraws Krist from your account
             chatbox.tell(user,"&e"..tonumber(args[2]).."kst &awas withdrawed from your account",config.shopname,nil,"format")
             if config.webhook then
                 local emb = dw.createEmbed()
-                    :setAuthor("Solidity Pools")
+                    :setAuthor("Fluidity Pools")
                     :setTitle("Withdraw")
                     :setColor(3328100)
                     :addField("User: ", user.." (`"..data.user.uuid.."`)",true)
@@ -290,7 +290,7 @@ Withdraws Krist from your account
                     :addField("Value: ", args[2],true)
                     :addField("New balance: ", tostring(math.floor(pdat.balance*1000)/1000),true)
                     :setTimestamp()
-                    :setFooter("SolidityPools v"..SolidityPools.version)
+                    :setFooter("FluidityPools v"..FluidityPools.version)
                 dw.sendMessage(config.webhook_url, config.shopname, nil, "", {emb.sendable()})
             end
         else
@@ -311,10 +311,10 @@ Withdraws Krist from your account
 &aaddress: &7]]..config.address..[[
 
 &aTrading fees: &7]]..config.tradingFees..[[%
-&aBalance: &e]]..SolidityPools.kapi.getBalance(config.address)..[[kst
+&aBalance: &e]]..FluidityPools.kapi.getBalance(config.address)..[[kst
 &aStorage: &7]]..stor.used.."/"..stor.total.." ("..(math.floor(stor.used/stor.total*100*1000)/1000).."%)"..[[
 
-&aVersion: &7]]..SolidityPools.version..[[
+&aVersion: &7]]..FluidityPools.version..[[
             ]]
             chatbox.tell(user, smsg, config.shopname, nil, "format")
         else
@@ -363,15 +363,15 @@ Withdraws Krist from your account
             chatbox.tell(user, "&cCurrently you are not in a session", config.shopname, nil, "format")
             return
         end
-        if SolidityPools.itemChangeInfo.is then
+        if FluidityPools.itemChangeInfo.is then
             chatbox.tell(user, "&cPlease wait a few seconds", config.shopname, nil, "format")
             return
         end
-        if SolidityPools.lockTurtleInv then
+        if FluidityPools.lockTurtleInv then
             chatbox.tell(user, "&cPlease wait a few seconds", config.shopname, nil, "format")
             return
         end
-        SolidityPools.lockTurtleInv = true
+        FluidityPools.lockTurtleInv = true
         for k,v in pairs(items) do
             for kk,vv in ipairs(v) do
                 if vv.name:gsub(" ", ""):lower() == args[2]:lower() then
@@ -379,12 +379,12 @@ Withdraws Krist from your account
                     local pdat = loadCache("/users/"..data.user.uuid..".cache")
                     if pdat.balance < costMoney then
                         chatbox.tell(user, "&cYou don't have enough funds to buy this amount", config.shopname, nil, "format")
-                        SolidityPools.lockTurtleInv = false
+                        FluidityPools.lockTurtleInv = false
                         return
                     end
                     if vv.count < tonumber(args[3]) then
                         chatbox.tell(user, "&cNot enough items in the storage", config.shopname, nil, "format")
-                        SolidityPools.lockTurtleInv = false
+                        FluidityPools.lockTurtleInv = false
                         return
                     end
                     pdat.balance = pdat.balance - costMoney
@@ -406,18 +406,18 @@ Withdraws Krist from your account
                     loggedIn.itemTransactions[vv.name] = loggedIn.itemTransactions[vv.name] - tonumber(args[3])
                     saveCache("/users/"..data.user.uuid..".cache", pdat)
                     loggedIn.loadUser()
-                    SolidityPools.itemChangeInfo.is = true
-                    SolidityPools.itemChangeInfo.category = k
-                    SolidityPools.itemChangeInfo.pos = kk
-                    SolidityPools.itemChangeInfo.mode = "buy"
-                    SolidityPools.itemChangeInfo.time = os.clock()
+                    FluidityPools.itemChangeInfo.is = true
+                    FluidityPools.itemChangeInfo.category = k
+                    FluidityPools.itemChangeInfo.pos = kk
+                    FluidityPools.itemChangeInfo.mode = "buy"
+                    FluidityPools.itemChangeInfo.time = os.clock()
                     BIL.dropItems(vv.query, tonumber(args[3]))
                     os.queueEvent("sp_rerender")
                     chatbox.tell(user, "&2Success! &aYou bought &7x"..tonumber(args[3]).." "..vv.name.." &afor &e"..(math.floor(costMoney*1000)/1000).."kst &7("..(math.floor(costMoney/tonumber(args[3])*1000)/1000).."kst/i)", config.shopname, nil, "format")
                     loggedIn.timeout = os.clock()
                     if config.webhook then
                         local emb = dw.createEmbed()
-                            :setAuthor("Solidity Pools")
+                            :setAuthor("Fluidity Pools")
                             :setTitle("Item bought")
                             :setColor(3302600)
                             :addField("User: ", loggedIn.username.." (`"..loggedIn.uuid.."`)",true)
@@ -431,15 +431,15 @@ Withdraws Krist from your account
                             :addField("Count: ", args[3], true)
                             :addField("Cost: ", tostring(math.floor(costMoney*1000)/1000),true)
                             :setTimestamp()
-                            :setFooter("SolidityPools v"..SolidityPools.version)
+                            :setFooter("FluidityPools v"..FluidityPools.version)
                         dw.editMessage(config.webhook_url, loggedIn.msgId, "", {emb.sendable()})
                     end
-                    SolidityPools.lockTurtleInv = false
+                    FluidityPools.lockTurtleInv = false
                     return
                 end
             end
         end
-        SolidityPools.lockTurtleInv = false
+        FluidityPools.lockTurtleInv = false
         chatbox.tell(user, "&cInvalid item", config.shopname, nil, "format")
     elseif args[1] == "exit" then
         if (loggedIn.is) and (loggedIn.uuid == data.user.uuid) then
@@ -447,7 +447,7 @@ Withdraws Krist from your account
             chatbox.tell(user, "&aYour remaining &e"..(math.floor(loggedIn.balance*1000)/1000).."kst &awill be stored for your next purchase", config.shopname, nil, "format")
             if config.webhook then
                 local emb = dw.createEmbed()
-                    :setAuthor("Solidity Pools")
+                    :setAuthor("Fluidity Pools")
                     :setTitle("Session ended")
                     :setColor(3302600)
                     :addField("User: ", loggedIn.username.." (`"..loggedIn.uuid.."`)",true)
@@ -457,10 +457,10 @@ Withdraws Krist from your account
                     :addField("Item's bought: ", tostring(math.floor(loggedIn.itmsBought*1000)/1000),true)
                     :addField("Money gained/spent: ", tostring(math.floor(loggedIn.moneyGained*1000)/1000),true)
                     :setTimestamp()
-                    :setFooter("SolidityPools v"..SolidityPools.version)
+                    :setFooter("FluidityPools v"..FluidityPools.version)
                 dw.editMessage(config.webhook_url, loggedIn.msgId, "", {emb.sendable()})
                 local emb2 = dw.createEmbed()
-                    :setAuthor("Solidity Pools")
+                    :setAuthor("Fluidity Pools")
                     :setTitle("Session details")
                     :setDescription("Item changes in the storage")
                     :setColor(3302600)
@@ -468,7 +468,7 @@ Withdraws Krist from your account
                     :addField("Balance: ", tostring(math.floor(loggedIn.balance*1000)/1000),true)
                     :addField("-","-")
                     :setTimestamp()
-                    :setFooter("SolidityPools v"..SolidityPools.version)
+                    :setFooter("FluidityPools v"..FluidityPools.version)
                 for k,v in pairs(loggedIn.itemTransactions) do
                     if v ~= 0 then
                         emb2:addField(k, tostring(v), true)
@@ -497,12 +497,12 @@ Withdraws Krist from your account
 end 
 
 function commandHandler()
-    config = SolidityPools.config
-    items = SolidityPools.items
-    BIL = SolidityPools.BIL
-    loggedIn = SolidityPools.loggedIn
-    dw = SolidityPools.dw
-    while (not SolidityPools.pricesLoaded) or (not SolidityPools.countsLoaded) do
+    config = FluidityPools.config
+    items = FluidityPools.items
+    BIL = FluidityPools.BIL
+    loggedIn = FluidityPools.loggedIn
+    dw = FluidityPools.dw
+    while (not FluidityPools.pricesLoaded) or (not FluidityPools.countsLoaded) do
         os.sleep(0)
     end
     while true do

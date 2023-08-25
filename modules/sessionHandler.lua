@@ -83,13 +83,13 @@ local function getTargetStorage()
 end
 
 local function onItemPickup()
-    SolidityPools.lockTurtleInv = true
+    FluidityPools.lockTurtleInv = true
     for k,v in pairs(items) do
         for kk,vv in ipairs(v) do
             if BIL.isItemMatch("turtle", 1, turtle.getItemDetail(1), vv.query) then
                 if not loggedIn.is then
                     turtle.drop()
-                    SolidityPools.lockTurtleInv = false
+                    FluidityPools.lockTurtleInv = false
                     return
                 end
                 local targetStorage = getTargetStorage()
@@ -119,17 +119,17 @@ local function onItemPickup()
                     loggedIn.itemTransactions[vv.name] = loggedIn.itemTransactions[vv.name] + coant
                     saveCache("/users/"..loggedIn.uuid..".cache", pdat)
                     loggedIn.loadUser()
-                    SolidityPools.itemChangeInfo.is = true
-                    SolidityPools.itemChangeInfo.category = k
-                    SolidityPools.itemChangeInfo.pos = kk
-                    SolidityPools.itemChangeInfo.mode = "sell"
-                    SolidityPools.itemChangeInfo.time = os.clock()
+                    FluidityPools.itemChangeInfo.is = true
+                    FluidityPools.itemChangeInfo.category = k
+                    FluidityPools.itemChangeInfo.pos = kk
+                    FluidityPools.itemChangeInfo.mode = "sell"
+                    FluidityPools.itemChangeInfo.time = os.clock()
                     os.queueEvent("sp_rerender")
                     chatbox.tell(loggedIn.uuid, "&2Success! &aYou sold &7x"..coant.." "..vv.name.." &afor &e"..(math.floor(worthMoney*1000)/1000).."kst &7("..(math.floor(worthMoney/coant*1000)/1000).."kst/i)", config.shopname, nil, "format")
                     loggedIn.timeout = os.clock()
                     if config.webhook then
                         local emb = dw.createEmbed()
-                            :setAuthor("Solidity Pools")
+                            :setAuthor("Fluidity Pools")
                             :setTitle("Item Sold")
                             :setColor(3302600)
                             :addField("User: ", loggedIn.username.." (`"..loggedIn.uuid.."`)",true)
@@ -143,32 +143,32 @@ local function onItemPickup()
                             :addField("Count: ", tostring(coant), true)
                             :addField("Worth: ", tostring(math.floor(worthMoney*1000)/1000),true)
                             :setTimestamp()
-                            :setFooter("SolidityPools v"..SolidityPools.version)
+                            :setFooter("FluidityPools v"..FluidityPools.version)
                         dw.editMessage(config.webhook_url, loggedIn.msgId, "", {emb.sendable()})
                     end
                 else
                     turtle.drop()
                     chatbox.tell(loggedIn.uuid, "&cOur storage is full, please try again later", config.shopname, nil, "format")
                 end
-                SolidityPools.lockTurtleInv = false
+                FluidityPools.lockTurtleInv = false
                 return
             end
         end
     end
-    SolidityPools.lockTurtleInv = false
+    FluidityPools.lockTurtleInv = false
     turtle.drop()
 end
 
 function sessionHandler()
-    config = SolidityPools.config
-    items = SolidityPools.items
-    BIL = SolidityPools.BIL
-    loggedIn = SolidityPools.loggedIn
-    dw = SolidityPools.dw
-    itemChangeInfo = SolidityPools.itemChangeInfo
+    config = FluidityPools.config
+    items = FluidityPools.items
+    BIL = FluidityPools.BIL
+    loggedIn = FluidityPools.loggedIn
+    dw = FluidityPools.dw
+    itemChangeInfo = FluidityPools.itemChangeInfo
     local function itemPup()
         while true do
-            if ((config.mode == "both") or (config.mode == "sell")) and loggedIn.is and (not SolidityPools.itemChangeInfo.is) and (not SolidityPools.lockTurtleInv) then
+            if ((config.mode == "both") or (config.mode == "sell")) and loggedIn.is and (not FluidityPools.itemChangeInfo.is) and (not FluidityPools.lockTurtleInv) then
                 local succ = turtle.suckUp()
                 if succ then
                     onItemPickup()
@@ -185,7 +185,7 @@ function sessionHandler()
                     chatbox.tell(loggedIn.uuid, "&aYour remaining &e"..(math.floor(loggedIn.balance*1000)/1000).."kst &awill be stored for your next purchase", config.shopname, nil, "format")
                     if config.webhook then
                         local emb = dw.createEmbed()
-                            :setAuthor("Solidity Pools")
+                            :setAuthor("Fluidity Pools")
                             :setTitle("Session ended")
                             :setColor(3302600)
                             :addField("User: ", loggedIn.username.." (`"..loggedIn.uuid.."`)",true)
@@ -195,10 +195,10 @@ function sessionHandler()
                             :addField("Item's bought: ", tostring(math.floor(loggedIn.itmsBought*1000)/1000),true)
                             :addField("Money gained/spent: ", tostring(math.floor(loggedIn.moneyGained*1000)/1000),true)
                             :setTimestamp()
-                            :setFooter("SolidityPools v"..SolidityPools.version)
+                            :setFooter("FluidityPools v"..FluidityPools.version)
                         dw.editMessage(config.webhook_url, loggedIn.msgId, "", {emb.sendable()})
                         local emb2 = dw.createEmbed()
-                            :setAuthor("Solidity Pools")
+                            :setAuthor("Fluidity Pools")
                             :setTitle("Session details")
                             :setDescription("Item changes in the storage")
                             :setColor(3302600)
@@ -206,7 +206,7 @@ function sessionHandler()
                             :addField("Balance: ", tostring(math.floor(loggedIn.balance*1000)/1000),true)
                             :addField("-","-")
                             :setTimestamp()
-                            :setFooter("SolidityPools v"..SolidityPools.version)
+                            :setFooter("FluidityPools v"..FluidityPools.version)
                         for k,v in pairs(loggedIn.itemTransactions) do
                             if v ~= 0 then
                                 emb2:addField(k, tostring(v), true)
@@ -238,7 +238,7 @@ function sessionHandler()
                     chatbox.tell(loggedIn.uuid, "&aYour remaining &e"..(math.floor(loggedIn.balance*1000)/1000).."kst &awill be stored for your next purchase", config.shopname, nil, "format")
                     if config.webhook then
                         local emb = dw.createEmbed()
-                            :setAuthor("Solidity Pools")
+                            :setAuthor("Fluidity Pools")
                             :setTitle("Session ended")
                             :setColor(3302600)
                             :addField("User: ", loggedIn.username.." (`"..loggedIn.uuid.."`)",true)
@@ -248,10 +248,10 @@ function sessionHandler()
                             :addField("Item's bought: ", tostring(math.floor(loggedIn.itmsBought*1000)/1000),true)
                             :addField("Money gained/spent: ", tostring(math.floor(loggedIn.moneyGained*1000)/1000),true)
                             :setTimestamp()
-                            :setFooter("SolidityPools v"..SolidityPools.version)
+                            :setFooter("FluidityPools v"..FluidityPools.version)
                         dw.editMessage(config.webhook_url, loggedIn.msgId, "", {emb.sendable()})
                         local emb2 = dw.createEmbed()
-                            :setAuthor("Solidity Pools")
+                            :setAuthor("Fluidity Pools")
                             :setTitle("Session details")
                             :setDescription("Item changes in the storage")
                             :setColor(3302600)
@@ -259,7 +259,7 @@ function sessionHandler()
                             :addField("Balance: ", tostring(math.floor(loggedIn.balance*1000)/1000),true)
                             :addField("-","-")
                             :setTimestamp()
-                            :setFooter("SolidityPools v"..SolidityPools.version)
+                            :setFooter("FluidityPools v"..FluidityPools.version)
                         for k,v in pairs(loggedIn.itemTransactions) do
                             if v ~= 0 then
                                 emb2:addField(k, tostring(v), true)
@@ -287,7 +287,7 @@ function sessionHandler()
         while true do
             if itemChangeInfo.is and (os.clock()-itemChangeInfo.time > 1) then
                 if config.dynamicPricing then
-                    local count = SolidityPools.BIL.getItemCount(items[itemChangeInfo.category][itemChangeInfo.pos].query)
+                    local count = FluidityPools.BIL.getItemCount(items[itemChangeInfo.category][itemChangeInfo.pos].query)
                     if items[itemChangeInfo.category][itemChangeInfo.pos].forcePrice then
                         items[itemChangeInfo.category][itemChangeInfo.pos].price = items[itemChangeInfo.category][itemChangeInfo.pos].normalPrice
                         items[itemChangeInfo.category][itemChangeInfo.pos].count = count
